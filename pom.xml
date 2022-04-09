@@ -43,14 +43,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		
-		<!-- Starter Dev tools **Remove before release** -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		
 		<!-- Starter Spring Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -85,13 +77,6 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>${springdoc.version}</version>
-		</dependency>
-
-		<!-- Driver de base de datos -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 		<!-- jwt dependency -->
@@ -162,4 +147,87 @@
 		</resources>	
 	</build>
 
+	<profiles>
+		<profile>
+			<id>local</id>
+	        <properties>
+            	<spring.profiles.active>local</spring.profiles.active>
+        	</properties>
+       	    <activation>
+        		<activeByDefault>true</activeByDefault>
+    		</activation>
+			<dependencies>
+				<!-- Starter Dev tools **Remove before release** -->
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-devtools</artifactId>
+					<scope>runtime</scope>
+					<optional>true</optional>
+				</dependency>
+				<!-- Driver de base de datos -->
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>test</id>
+	        <properties>
+            	<spring.profiles.active>test</spring.profiles.active>
+        	</properties>
+			<dependencies>
+				<!-- Starter Dev tools **Remove before release** -->
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-devtools</artifactId>
+					<scope>runtime</scope>
+					<optional>true</optional>
+				</dependency>
+				<!-- Driver de base de datos -->
+				<dependency>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>testUrl</id>
+	        <properties>
+            	<spring.profiles.active>postgres,test</spring.profiles.active>
+        	</properties>
+			<dependencies>
+				<!-- Starter Dev tools **Remove before release** -->
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-devtools</artifactId>
+					<scope>runtime</scope>
+					<optional>true</optional>
+				</dependency>
+				<!-- Driver de base de datos -->
+				<dependency>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>prod</id>
+		    <properties>
+        		<maven.test.skip>true</maven.test.skip>
+            	<spring.profiles.active>prostgres,prod</spring.profiles.active>
+        	</properties>
+			<dependencies>
+				<!-- Driver de base de datos -->
+				<dependency>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 </project>
