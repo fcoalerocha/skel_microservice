@@ -35,6 +35,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${spring.h2.console.path}")
 	private String h2ConsolePath;
 	
+	
+	private String[] AUTH_WHITELIST = {
+            // -- Swagger UI v3 (OpenAPI)
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/actuator/**",
+            "/actuator/**/**",
+            // other public endpoints of your API may be appended to this array
+            "/auth/**",
+            h2ConsolePath+"/**",//remove if db isn't h2
+            "/service",
+            "/hello"
+    };
+	
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
 		return new AuthTokenFilter();
@@ -61,8 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests().antMatchers("/auth/**").permitAll()
-			.antMatchers(h2ConsolePath + "/**").permitAll() //remove if db isn't h2
+			.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
 			.anyRequest().authenticated();
 		
 		// fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
